@@ -1,476 +1,413 @@
-# Legal Metrology Compliance Validator# Legal Metrology Compliance Rule Engine
+# Legal Metrology Compliance Validator
 
+**A comprehensive validation engine for Indian Legal Metrology (Packaged Commodities) Rules, 2011.**
 
+This module provides automated compliance checking for e-commerce and retail product data, ensuring adherence to legal requirements for packaged goods sold in India. Designed to integrate seamlessly with OCR pipelines and data processing systems.
 
-**A comprehensive validation engine for Indian Legal Metrology (Packaged Commodities) Rules, 2011.**A Python-based compliance validation system for e-commerce product data against the Indian Legal Metrology (Packaged Commodities) Rules, 2011.
+[![Python](https://img.shields.io/badge/Python-3.8%2B-blue)](https://python.org)
+[![License](https://img.shields.io/badge/License-MIT-green)](../LICENSE)
+[![Legal](https://img.shields.io/badge/Legal-Metrology%202011-red)](https://consumeraffairs.nic.in/)
 
+## 🎯 Overview
 
+The `ComplianceValidator` class implements a robust validation system that checks product information against **13+ specific Legal Metrology rules**. This system is specifically designed for:
 
-This module provides automated compliance checking for e-commerce and retail product data, ensuring adherence to legal requirements for packaged goods sold in India.## Overview
+- **E-commerce platforms** validating product listings
+- **OCR pipelines** processing product label data
+- **Retail systems** ensuring compliance before product launch
+- **Quality assurance** teams validating product information
 
-
-
-## 🎯 OverviewThis project implements a `ComplianceValidator` class that validates product information extracted from e-commerce platforms against legal metrology requirements. The system is designed to integrate with OCR/AI pipelines that extract structured product data from images.
-
-
-
-The `ComplianceValidator` class implements a robust validation system that checks product information against 20+ specific Legal Metrology rules. Designed to integrate seamlessly with OCR pipelines and e-commerce platforms.## Features
-
-
-
-### Key Capabilities- **Comprehensive Rule Coverage**: Implements 13 specific rules covering all major Legal Metrology requirements
-
-- ✅ **20+ Validation Rules**: Covers all major Legal Metrology requirements- **Flexible Input Handling**: Handles missing or `None` values gracefully (common in OCR scenarios)
-
-- 🔍 **Flexible Input Handling**: Gracefully handles missing or `None` values (common in OCR)- **Severity Classification**: Categorizes violations as Critical, High, Medium severity
-
-- 📊 **Severity Classification**: Categorizes violations as Critical, High, Medium- **Detailed Validation Reports**: Returns structured violation reports with rule IDs, descriptions, and affected fields
-
-- 📋 **Detailed Reports**: Returns structured violation reports with rule IDs and descriptions- **Multiple Validation Patterns**: Supports regex-based format validation, date validation, and conditional logic
-
+### Key Capabilities
+- ✅ **13+ Validation Rules**: Comprehensive coverage of Legal Metrology requirements
+- 🔍 **Flexible Input Handling**: Gracefully handles missing or `None` values (common in OCR)
+- 📊 **Severity Classification**: Categorizes violations as Critical, High, Medium
+- 📋 **Detailed Reports**: Returns structured violation reports with rule IDs and descriptions
 - 🛡️ **Production Ready**: Comprehensive error handling and logging
-
-## Project Structure
+- 🚀 **Easy Integration**: Simple API for embedding in existing systems
 
 ## 🏗️ Architecture
 
+```mermaid
+graph TD
+    A[Product Data Input] --> B[Field Validation]
+    B --> C[Format Validation]  
+    C --> D[Content Validation]
+    D --> E[Cross-Field Validation]
+    E --> F[Violation Report]
+    
+    style A fill:#e1f5fe
+    style F fill:#ffebee
+    style B,C,D,E fill:#f3e5f5
 ```
 
-```mermaidd:\lmpc_checker\
+## 📋 Supported Validation Rules
 
-graph TD├── compliance_validator.py     # Main ComplianceValidator class
-
-    A[Product Data Input] --> B[Field Validation]├── main.py                     # Demonstration script with examples
-
-    B --> C[Format Validation]├── test_examples.py           # Comprehensive test suite
-
-    C --> D[Content Validation]└── README.md                  # This documentation
-
-    D --> E[Cross-Field Validation]```
-
-    E --> F[Violation Report]
-
-```## Installation
-
-
-
-## 📋 Supported Validation Rules1. Ensure Python 3.8+ is installed
-
-2. Install required dependencies:
-
-### Critical Requirements (Must-Have Fields)   ```bash
-
-| Rule ID | Description | Field |   pip install rule-engine
-
-|---------|-------------|-------|   ```
-
+### Critical Requirements (Must-Have Fields)
+| Rule ID | Description | Field Validated |
+|---------|-------------|-----------------|
 | `LM_RULE_01_MRP_MISSING` | MRP is mandatory | `mrp` |
-
-| `LM_RULE_02_NET_QTY_MISSING` | Net Quantity is mandatory | `net_quantity` |## Usage
-
+| `LM_RULE_02_NET_QTY_MISSING` | Net Quantity is mandatory | `net_quantity` |
 | `LM_RULE_03_ORIGIN_MISSING` | Country of Origin is mandatory | `country_of_origin` |
-
-| `LM_RULE_04_MFG_DETAILS_MISSING` | Manufacturer details are mandatory | `manufacturer_details` |### Basic Usage
-
-| `LM_RULE_05_DATE_MISSING` | Manufacturing/Import date is mandatory | `date_of_manufacture` |
-
-| `LM_RULE_06_CARE_INFO_MISSING` | Consumer care details are mandatory | `consumer_care` |```python
-
-from compliance_validator import ComplianceValidator
+| `LM_RULE_04_MFG_DETAILS_MISSING` | Manufacturer/Importer details required | `manufacturer_details` |
+| `LM_RULE_05_DATE_MISSING` | Manufacturing/Import date required | `date_of_manufacture` |
+| `LM_RULE_06_CARE_INFO_MISSING` | Consumer care details required | `consumer_care` |
 
 ### Format & Content Validation
+| Rule ID | Description | Validation Type |
+|---------|-------------|-----------------|
+| `LM_RULE_07_MRP_FORMAT` | MRP format validation | Currency format (₹/Rs.) |
+| `LM_RULE_08_NET_QTY_FORMAT` | Net quantity format validation | Unit validation (g/kg/ml/L) |
+| `LM_RULE_09_DATE_FUTURE` | Date cannot be in future | Date logic validation |
+| `LM_RULE_10_CARE_INFO_FORMAT` | Contact info format validation | Email/Phone validation |
 
-| Rule ID | Description | Validation Type |# Create validator instance
+### Conditional & Category-Specific Rules
+| Rule ID | Description | Condition |
+|---------|-------------|-----------|
+| `LM_RULE_11_BEST_BEFORE_MISSING` | Best before date for perishables | Groceries/Personal Care/Medicine |
+| `LM_RULE_12_IMPORT_DATE_MISSING` | Import date for imported products | When importer details present |
+| `LM_RULE_13_USP_MISSING` | Unit sale price for groceries | Grocery category items |
 
-|---------|-------------|-----------------|validator = ComplianceValidator()
+## 🚀 Quick Start
 
-| `LM_RULE_07_MRP_FORMAT_INVALID` | MRP format validation | Currency format |
+### Installation
+The validator is included with the main OCR pipeline. No separate installation required.
 
-| `LM_RULE_08_NET_QTY_FORMAT_INVALID` | Net quantity format validation | Unit format |# Define product data
-
-| `LM_RULE_09_PHONE_FORMAT_INVALID` | Phone number format validation | Phone format |product_data = {
-
-| `LM_RULE_10_DATE_FORMAT_INVALID` | Date format validation | Date format |    "product_id": "SKU-ELEC-001",
-
-| `LM_RULE_11_PIN_CODE_INVALID` | PIN code validation | 6-digit format |    "category": "Electronics", 
-
-| `LM_RULE_12_ORIGIN_INVALID` | Country validation | Valid country names |    "manufacturer_details": "Noise, Gurugram, Haryana, 122001",
-
-| `LM_RULE_13_MRP_ZERO_INVALID` | MRP cannot be zero | Value validation |    "importer_details": None,
-
-    "net_quantity": "1 Unit",
-
-## 🚀 Quick Start    "mrp": "₹1999",
-
-    "unit_sale_price": None,
-
-### Installation    "country_of_origin": "India",
-
-The validator is included with the main OCR pipeline. No separate installation required.    "date_of_manufacture": "08/2024",
-
-    "date_of_import": None,
-
-### Basic Usage    "best_before_date": None,
-
-    "consumer_care": "help@go-noise.com, +91 88821 32132",
-
-```python    "dimensions": "4.6 cm (1.83 inch) HD Display",
-
-from lmpc_checker.compliance_validator import ComplianceValidator    "contents": "1N Smartwatch, 1N Charging Cable, 1N Manual"
-
-}
-
-# Initialize validator
-
-validator = ComplianceValidator()# Validate the product
-
-violations = validator.validate(product_data)
-
-# Product data to validate
-
-product_data = {# Check results
-
-    "product_id": "SKU-ELECTRONICS-001",if violations:
-
-    "category": "Electronics",    print(f"Found {len(violations)} violations:")
-
-    "manufacturer_details": "TechCorp India Pvt Ltd, 123 Tech Park, Bangalore-560001",    for violation in violations:
-
-    "net_quantity": "1 UNIT",        print(f"- {violation['rule_id']}: {violation['description']}")
-
-    "mrp": "₹2999.00",else:
-
-    "country_of_origin": "India",    print("✅ Product is compliant!")
-
-    "date_of_manufacture": "06/2024",```
-
-    "consumer_care": "1800-TECH-HELP, support@techcorp.in"
-
-}### Expected Input Data Structure
-
-
-
-# Validate complianceThe validator expects a dictionary with the following fields (any field can be `None`):
-
-violations = validator.validate(product_data)
+### Basic Usage
 
 ```python
+from lmpc_checker.compliance_validator import ComplianceValidator
 
-# Check results{
+# Initialize validator
+validator = ComplianceValidator()
 
-if violations:    "product_id": str,              # Product identifier
+# Product data to validate
+product_data = {
+    "product_id": "SKU-ELEC-001",
+    "category": "Electronics",
+    "manufacturer_details": "Noise, Gurugram, Haryana, 122001",
+    "net_quantity": "1 Unit",
+    "mrp": "₹1999",
+    "country_of_origin": "India",
+    "date_of_manufacture": "08/2024",
+    "consumer_care": "help@go-noise.com, +91 88821 32132"
+}
 
-    print(f"❌ Found {len(violations)} compliance violations:")    "category": str,                # Product category (Electronics, Groceries, etc.)
+# Validate compliance
+violations = validator.validate(product_data)
 
-    for violation in violations:    "manufacturer_details": str,    # Manufacturer name and address
+# Check results
+if violations:
+    print(f"❌ Found {len(violations)} compliance violations:")
+    for violation in violations:
+        print(f"  • {violation['description']}")
+        print(f"    Rule: {violation['rule_id']}")
+        print(f"    Severity: {violation['severity']}")
+else:
+    print("✅ Product is fully compliant!")
+```
 
-        print(f"  • {violation['description']}")    "importer_details": str,        # Importer details (if applicable)
+### Running the Demo
+```bash
+cd lmpc_checker
+python main.py
+```
 
-else:    "net_quantity": str,           # Quantity with unit (e.g., "500g", "1 Unit")
+## 📊 Input Data Schema
 
-    print("✅ Product is fully compliant!")    "mrp": str,                    # Maximum Retail Price (e.g., "₹1999")
+The validator expects a dictionary with the following fields (all optional, but required fields will generate violations if missing):
 
-```    "unit_sale_price": str,        # Unit sale price (for groceries)
-
-    "country_of_origin": str,      # Country where product was made
-
-## 📊 Input Data Schema    "date_of_manufacture": str,    # Manufacturing date (MM/YYYY or DD/MM/YYYY)
-
-    "date_of_import": str,         # Import date (if imported)
-
-The validator expects a dictionary with the following fields (all fields optional, but required fields will generate violations if missing):    "best_before_date": str,       # Expiry/best before date
-
-    "consumer_care": str,          # Contact information (email/phone)
-
-```python    "dimensions": str,             # Product dimensions
-
-{    "contents": str               # Package contents description
-
-    "product_id": "str",              # Product identifier}
-
-    "category": "str",                # Product category```
-
+```python
+{
+    "product_id": "str",              # Product identifier
+    "category": "str",                # Product category (Electronics, Groceries, etc.)
     "manufacturer_details": "str",    # Full manufacturer name and address
-
-    "importer_details": "str",        # Importer information (if applicable)### Output Structure
-
-    "net_quantity": "str",            # Net quantity with units (e.g., "500g", "1L")
-
-    "mrp": "str",                     # Maximum Retail Price (e.g., "₹299.00")The `validate()` method returns a list of violation dictionaries:
-
-    "unit_sale_price": "str",         # Unit selling price
-
-    "country_of_origin": "str",       # Country of origin```python
-
-    "date_of_manufacture": "str",     # Manufacturing date (MM/YYYY format)[
-
-    "date_of_import": "str",          # Import date (if applicable)    {
-
-    "best_before_date": "str",        # Expiry/best before date        "rule_id": "LM_RULE_01_MRP_MISSING",
-
-    "consumer_care": "str",           # Customer care contact information        "description": "The Maximum Retail Price (MRP) is a mandatory declaration and is missing.",
-
-    "dimensions": "str",              # Product dimensions        "violating_field": "mrp",
-
-    "contents": "str"                 # Product contents/ingredients        "severity": "critical"
-
-}    }
-
-```]
-
+    "importer_details": "str",        # Importer information (if applicable)
+    "net_quantity": "str",            # Net quantity with units (e.g., "500g", "1L", "1 Unit")
+    "mrp": "str",                     # Maximum Retail Price (e.g., "₹299.00")
+    "unit_sale_price": "str",         # Unit selling price (for groceries)
+    "country_of_origin": "str",       # Country of origin
+    "date_of_manufacture": "str",     # Manufacturing date (MM/YYYY format)
+    "date_of_import": "str",          # Import date (if applicable)
+    "best_before_date": "str",        # Expiry/best before date
+    "consumer_care": "str",           # Customer care contact information
+    "dimensions": "str",              # Product dimensions
+    "contents": "str"                 # Product contents/ingredients
+}
 ```
 
 ## 📋 Output Format
 
-## Implemented Rules
-
 The `validate()` method returns a list of violation dictionaries:
 
-### Mandatory Field Presence Rules
-
 ```python
-
-[| Rule ID | Description | Severity |
-
-    {|---------|-------------|----------|
-
-        "rule_id": "LM_RULE_01_MRP_MISSING",| `LM_RULE_01_MRP_MISSING` | MRP is missing | Critical |
-
-        "severity": "Critical",| `LM_RULE_02_NET_QTY_MISSING` | Net Quantity is missing | Critical |
-
-        "description": "Maximum Retail Price (MRP) is missing",| `LM_RULE_03_ORIGIN_MISSING` | Country of Origin is missing | Critical |
-
-        "field": "mrp",| `LM_RULE_04_MFG_DETAILS_MISSING` | Manufacturer/Importer details missing | Critical |
-
-        "expected": "Valid MRP with currency symbol",| `LM_RULE_05_DATE_MISSING` | Manufacturing/Import date missing | Critical |
-
-        "actual": "None"| `LM_RULE_06_CARE_INFO_MISSING` | Consumer care details missing | Critical |
-
+[
+    {
+        "rule_id": "LM_RULE_01_MRP_MISSING",
+        "description": "The Maximum Retail Price (MRP) is a mandatory declaration and is missing.",
+        "violating_field": "mrp",
+        "severity": "critical"
     }
-
-]### Format and Content Validation Rules
-
+]
 ```
 
-| Rule ID | Description | Severity |
+### Severity Levels
+- **`critical`**: Must be fixed before product can be sold legally
+- **`high`**: Important compliance requirements that should be addressed
+- **`medium`**: Recommended improvements for better compliance
 
-### Severity Levels|---------|-------------|----------|
+## 🧪 Examples and Test Cases
 
-- **Critical**: Must be fixed before product can be sold| `LM_RULE_07_MRP_FORMAT` | Invalid MRP format | High |
+### ✅ Compliant Product Example
+```python
+compliant_product = {
+    "product_id": "SKU-FOOD-001",
+    "category": "Food",
+    "manufacturer_details": "GoodFood Ltd, Food Park, Chennai-600001, Tamil Nadu",
+    "net_quantity": "500g",
+    "mrp": "₹150.00",
+    "country_of_origin": "India",
+    "date_of_manufacture": "08/2024",
+    "consumer_care": "1800-GOOD-FOOD, care@goodfood.com"
+}
 
-- **High**: Important compliance requirements| `LM_RULE_08_NET_QTY_FORMAT` | Invalid net quantity format | High |
+violations = validator.validate(compliant_product)
+# Result: [] (no violations)
+```
 
-- **Medium**: Recommended improvements| `LM_RULE_09_DATE_FUTURE` | Date is in the future | High |
+### ❌ Non-Compliant Product Example
+```python
+non_compliant_product = {
+    "product_id": "SKU-INVALID-001",
+    "category": "Electronics",
+    "manufacturer_details": None,     # Missing critical field
+    "net_quantity": "invalid unit",   # Invalid format
+    "mrp": "0",                      # Invalid MRP
+    "country_of_origin": None,       # Missing critical field
+    "consumer_care": "123"           # Invalid contact format
+}
 
-| `LM_RULE_10_CARE_INFO_FORMAT` | Invalid contact format | Medium |
+violations = validator.validate(non_compliant_product)
+# Result: Multiple violations for missing and invalid fields
+```
+
+### 🏪 Grocery-Specific Validation
+```python
+grocery_product = {
+    "product_id": "SKU-GROCERY-001",
+    "category": "Groceries",
+    "manufacturer_details": "Fresh Foods Pvt Ltd, Mumbai-400001",
+    "net_quantity": "1kg",
+    "mrp": "₹199.00",
+    "country_of_origin": "India",
+    "date_of_manufacture": "09/2024",
+    "best_before_date": "09/2025",    # Required for groceries
+    "consumer_care": "care@freshfoods.com",
+    "unit_sale_price": "₹199.00/kg"  # Required for groceries
+}
+```
 
 ## 🔧 Advanced Usage
 
-### Conditional & Category-Specific Rules
+### Custom Validation Workflow
+```python
+from lmpc_checker.compliance_validator import ComplianceValidator
 
-### Custom Validation
+class CustomComplianceChecker:
+    def __init__(self):
+        self.validator = ComplianceValidator()
+    
+    def check_batch(self, products):
+        """Validate multiple products at once"""
+        results = []
+        for product in products:
+            violations = self.validator.validate(product)
+            results.append({
+                'product_id': product.get('product_id'),
+                'compliant': len(violations) == 0,
+                'violation_count': len(violations),
+                'critical_violations': [v for v in violations if v['severity'] == 'critical'],
+                'all_violations': violations
+            })
+        return results
+    
+    def compliance_summary(self, products):
+        """Generate compliance summary report"""
+        results = self.check_batch(products)
+        total = len(results)
+        compliant = sum(1 for r in results if r['compliant'])
+        
+        return {
+            'total_products': total,
+            'compliant_products': compliant,
+            'compliance_rate': f"{(compliant/total*100):.1f}%" if total > 0 else "0%",
+            'products_needing_attention': total - compliant
+        }
 
-```python| Rule ID | Description | Severity |
-
-from lmpc_checker.compliance_validator import ComplianceValidator|---------|-------------|----------|
-
-| `LM_RULE_11_BEST_BEFORE_MISSING` | Missing expiry date for applicable categories | High |
-
-validator = ComplianceValidator()| `LM_RULE_12_IMPORT_DATE_MISSING` | Missing import date for imported products | High |
-
-| `LM_RULE_13_USP_MISSING` | Missing unit sale price for groceries | Medium |
-
-# Validate specific fields only
-
-partial_data = {"mrp": "₹500", "net_quantity": "250g"}## Validation Details
-
-violations = validator.validate(partial_data)
-
-### Supported MRP Formats
-
-# Custom severity filtering- `₹1999`
-
-critical_violations = [v for v in violations if v['severity'] == 'Critical']- `Rs. 1999`
-
-```- `Rs.1999`
-
-- `₹ 1999.50`
+# Usage
+checker = CustomComplianceChecker()
+summary = checker.compliance_summary(product_list)
+print(f"Compliance Rate: {summary['compliance_rate']}")
+```
 
 ### Integration with OCR Pipeline
+```python
+from live_processor import LiveProcessor
+from data_refiner.refiner import DataRefiner
+from lmpc_checker.compliance_validator import ComplianceValidator
 
-```python### Supported Net Quantity Units
+class FullCompliancePipeline:
+    def __init__(self):
+        self.ocr_processor = LiveProcessor()
+        self.data_refiner = DataRefiner()
+        self.validator = ComplianceValidator()
+    
+    def process_image_to_compliance(self, image_path):
+        """Complete pipeline from image to compliance report"""
+        # Step 1: OCR Processing
+        ocr_result = self.ocr_processor.process_single_capture()
+        
+        # Step 2: Data Refinement
+        clean_data = self.data_refiner.refine(ocr_result)
+        
+        # Step 3: Compliance Validation
+        violations = self.validator.validate(clean_data)
+        
+        return {
+            'extracted_data': clean_data,
+            'compliance_status': 'COMPLIANT' if not violations else 'NON_COMPLIANT',
+            'violations': violations,
+            'violation_count': len(violations)
+        }
+```
 
-from live_processor import LiveProcessor- Weight: `g`, `kg`
+## 🔍 Validation Logic Details
 
-from data_refiner.refiner import DataRefiner- Volume: `ml`, `L`
+### MRP Validation
+- **Accepted formats**: `₹1999`, `Rs. 1999`, `Rs.1999.00`
+- **Rejected formats**: `1999 rupees`, `INR 1999`, `0`
 
-from lmpc_checker.compliance_validator import ComplianceValidator- Length: `cm`, `m`
+### Net Quantity Validation
+- **Accepted units**: `g`, `kg`, `ml`, `L`, `cm`, `m`, `N`, `Unit`, `Units`, `Piece`, `Pieces`
+- **Examples**: `500g`, `1.5kg`, `250ml`, `1 Unit`, `2 Pieces`
 
-- Count: `N`, `Unit`, `Units`, `Piece`, `Pieces`
+### Date Validation
+- **Accepted formats**: `MM/YYYY`, `DD/MM/YYYY`, `MM-YYYY`, `YYYY-MM-DD`
+- **Logic**: Manufacturing/Import dates cannot be in the future
 
-# Complete pipeline integration
+### Contact Information Validation
+- **Email pattern**: Standard email regex validation
+- **Phone patterns**: 
+  - 10-digit Indian mobile: `9876543210`
+  - With country code: `+91 9876543210`, `91-9876543210`
+  - Formatted: `98765-43210`, `+91 98765 43210`
 
-processor = LiveProcessor()### Supported Date Formats
+## 📁 Module Structure
 
-refiner = DataRefiner()- `MM/YYYY` (e.g., `08/2024`)
+```
+lmpc_checker/
+├── 📄 README.md                    # This documentation
+├── 🔧 compliance_validator.py      # Main ComplianceValidator class
+├── 🚀 main.py                      # Demonstration script with examples
+└── 📋 (Future: test_suite.py)      # Comprehensive test cases
+```
 
-validator = ComplianceValidator()- `DD/MM/YYYY` (e.g., `15/08/2024`)
+### File Descriptions
 
-- `MM-YYYY` and `DD-MM-YYYY`
+#### `compliance_validator.py`
+- **ComplianceValidator class**: Main validation engine
+- **Rule definitions**: All 13+ validation rules with severity levels
+- **Helper methods**: Format validation, date parsing, pattern matching
+- **Error handling**: Graceful handling of malformed input data
 
-# Process image through pipeline- `YYYY-MM` and `YYYY-MM-DD`
+#### `main.py`
+- **Demo script**: Comprehensive examples showing validator usage
+- **Test cases**: Multiple product scenarios including compliant and non-compliant examples
+- **Output formatting**: Structured display of validation results
+- **Category testing**: Examples for different product categories
 
-ocr_result = processor.process_single_capture()
+## 🧪 Testing and Validation
 
-clean_data = refiner.refine(ocr_result)### Contact Information Validation
+### Running the Demo
+```bash
+# Navigate to the lmpc_checker directory
+cd lmpc_checker
 
-violations = validator.validate(clean_data)- **Email**: Standard email format validation
+# Run the comprehensive demo
+python main.py
+```
 
-- **Phone**: Indian phone numbers (10 digits starting with 6-9, with optional +91 country code)
+### Expected Output
+The demo script tests three scenarios:
+1. **Electronics product** with future date violation
+2. **Product with missing MRP** (critical violation)
+3. **Grocery product** with multiple compliance issues
 
-# Generate compliance report
-
-compliance_status = "COMPLIANT" if not violations else "NON_COMPLIANT"### Category-Specific Rules
-
-print(f"Compliance Status: {compliance_status}")- **Groceries**: Require best before date and unit sale price
-
-```- **Personal Care**: Require best before date
-
-- **Medicine**: Require best before date
-
-## 📈 Validation Examples
-
-## Running Tests
-
-### ✅ Compliant Product
-
-```pythonExecute the test suite to see various validation scenarios:
-
-compliant_product = {
-
-    "product_id": "SKU-FOOD-001",```bash
-
-    "category": "Food",python test_examples.py
-
-    "manufacturer_details": "GoodFood Ltd, Food Park, Chennai-600001",```
-
-    "net_quantity": "500g",
-
-    "mrp": "₹150.00",Run the main demonstration:
-
-    "country_of_origin": "India",
-
-    "date_of_manufacture": "08/2024",```bash
-
-    "consumer_care": "1800-GOOD-FOOD, care@goodfood.com"python main.py
-
-}```
-
-
-
-violations = validator.validate(compliant_product)## Integration with FastAPI
-
-# Result: [] (no violations)
-
-```This validator can be easily integrated into a FastAPI backend:
-
-
-
-### ❌ Non-Compliant Product```python
-
-```pythonfrom fastapi import FastAPI
-
-non_compliant_product = {from compliance_validator import ComplianceValidator
-
-    "product_id": "SKU-INVALID-001",
-
-    "category": "Electronics",app = FastAPI()
-
-    # Missing required fieldsvalidator = ComplianceValidator()
-
-    "mrp": "0",  # Invalid zero MRP
-
-    "net_quantity": "invalid unit",  # Invalid format@app.post("/validate-product")
-
-    "consumer_care": "123"  # Invalid phone formatasync def validate_product(product_data: dict):
-
-}    violations = validator.validate(product_data)
-
-    return {
-
-violations = validator.validate(non_compliant_product)        "is_compliant": len(violations) == 0,
-
-# Result: Multiple violations for missing and invalid fields        "violations": violations,
-
-```        "total_violations": len(violations)
-
+### Adding Custom Test Cases
+```python
+# Add to main.py or create your own test script
+def test_custom_scenario():
+    validator = ComplianceValidator()
+    
+    custom_product = {
+        # Your test product data here
     }
-
-## 🧪 Testing```
-
-
-
-### Run Tests## Legal Metrology Context
-
-```python
-
-# Run the demonstration scriptThis implementation is based on the Indian Legal Metrology (Packaged Commodities) Rules, 2011, which mandates specific declarations on packaged goods sold in India. The rules ensure consumer protection by requiring clear, accurate product information.
-
-python lmpc_checker/main.py
-
-## Contributing
-
-# The script includes comprehensive test cases:
-
-# - Compliant product examplesThe rule engine is designed to be extensible. To add new rules:
-
-# - Various violation scenarios  
-
-# - Edge cases and boundary conditions1. Add a new rule tuple to the `self.rules` list in `ComplianceValidator.__init__()`
-
-```2. Implement any required helper validation functions
-
-3. Add test cases to verify the new rule
-
-### Test Cases Included
-
-- ✅ **Fully Compliant Products**: All requirements met## License
-
-- ❌ **Missing Critical Fields**: MRP, net quantity, origin, etc.
-
-- ⚠️ **Format Violations**: Invalid phone numbers, dates, unitsThis project is intended for educational and compliance purposes. Ensure you understand current legal requirements before using in production.
-- 🔍 **Edge Cases**: Empty strings, None values, special characters
-
-## 🔗 Integration Points
-
-### With OCR Pipeline
-```python
-# data_refiner/refiner.py already outputs compatible format
-clean_data = refiner.refine(ocr_output)
-violations = validator.validate(clean_data)
+    
+    violations = validator.validate(custom_product)
+    
+    # Assert expected violations
+    assert len(violations) == expected_count
+    assert any(v['rule_id'] == 'EXPECTED_RULE_ID' for v in violations)
 ```
 
-### With E-commerce Platforms
+## 🔗 Integration Examples
+
+### With E-commerce Platform
 ```python
-# Product catalog validation
-for product in product_catalog:
-    violations = validator.validate(product)
-    if violations:
-        mark_for_review(product, violations)
+def validate_product_listing(product_data):
+    """Validate before publishing product listing"""
+    validator = ComplianceValidator()
+    violations = validator.validate(product_data)
+    
+    critical_violations = [v for v in violations if v['severity'] == 'critical']
+    
+    if critical_violations:
+        return {
+            'can_publish': False,
+            'reason': 'Critical compliance violations found',
+            'required_fixes': critical_violations
+        }
+    
+    return {
+        'can_publish': True,
+        'warnings': violations,  # Non-critical violations as warnings
+        'compliance_score': calculate_compliance_score(violations)
+    }
 ```
 
-### With Quality Assurance
+### With Data Processing Pipeline
 ```python
-# Batch validation for quality control
-def validate_product_batch(products):
+def batch_compliance_check(csv_file_path):
+    """Process CSV file of products for compliance"""
+    import pandas as pd
+    
+    validator = ComplianceValidator()
+    df = pd.read_csv(csv_file_path)
+    
     results = []
-    for product in products:
-        violations = validator.validate(product)
+    for _, row in df.iterrows():
+        product_data = row.to_dict()
+        violations = validator.validate(product_data)
+        
         results.append({
-            'product_id': product.get('product_id'),
+            'product_id': row['product_id'],
             'compliant': len(violations) == 0,
-            'violations': violations
+            'violation_details': violations
         })
+    
+    # Save results
+    results_df = pd.DataFrame(results)
+    results_df.to_csv('compliance_results.csv', index=False)
+    
     return results
 ```
 
@@ -480,24 +417,80 @@ This validator implements rules based on:
 - **Legal Metrology (Packaged Commodities) Rules, 2011**
 - **Consumer Protection Act, 2019**
 - **Bureau of Indian Standards (BIS) guidelines**
+- **Food Safety and Standards Authority of India (FSSAI) requirements** (for food products)
 
-**Important**: This tool is for compliance assistance only. Always consult with legal experts for authoritative compliance validation.
+### Important Disclaimers
+- **Legal Assistance Only**: This tool provides compliance assistance but is not a substitute for legal advice
+- **Rule Updates**: Legal requirements may change; ensure you're using current regulations
+- **Professional Review**: Always consult with legal experts for critical compliance validation
+- **Industry-Specific Rules**: Some industries may have additional requirements beyond this validator
 
-## 🛠️ Configuration
+## 🛠️ Customization and Extension
 
-The validation rules are configurable in `compliance_validator.py`. You can:
-- Modify validation patterns
-- Add custom rules
-- Adjust severity levels
-- Configure field requirements
+### Adding New Validation Rules
+```python
+# In compliance_validator.py, add to the rules list:
+(
+    "CUSTOM_RULE_01",
+    "Your custom rule description",
+    "field_to_validate",
+    "severity_level",  # critical, high, medium
+    lambda data: your_validation_logic(data)
+)
+```
 
-## 📞 Support
+### Modifying Existing Rules
+```python
+def _is_valid_custom_format(self, value: str) -> bool:
+    """Add your custom validation logic"""
+    if not value or not isinstance(value, str):
+        return False
+    
+    # Your validation pattern here
+    pattern = r'your_regex_pattern'
+    return bool(re.match(pattern, value.strip()))
+```
 
-For issues specific to the Legal Metrology Compliance Validator:
-- Check the main repository issues: [GitHub Issues](https://github.com/yaswanthsetty/legal-metrology-ocr-pipeline/issues)
-- Review the validator logic in `compliance_validator.py`
-- Run `python main.py` for comprehensive test examples
+### Category-Specific Validation
+```python
+def _validate_electronics_category(self, product_data):
+    """Electronics-specific validation rules"""
+    violations = []
+    
+    # Add electronics-specific logic
+    if product_data.get('category') == 'Electronics':
+        # Custom electronics validation
+        pass
+    
+    return violations
+```
+
+## 📞 Support and Troubleshooting
+
+### Common Issues
+
+**Issue**: "Rule evaluation error"
+**Solution**: Check that product_data is a dictionary with string keys
+
+**Issue**: "Date parsing fails"
+**Solution**: Ensure dates are in supported formats (MM/YYYY, DD/MM/YYYY, etc.)
+
+**Issue**: "Phone validation too strict"
+**Solution**: Check phone format - should be Indian mobile numbers (10 digits starting with 6-9)
+
+### Getting Help
+- **Main Repository Issues**: [GitHub Issues](https://github.com/yaswanthsetty/legal-metrology-ocr-pipeline/issues)
+- **Code Review**: Check `compliance_validator.py` for validation logic
+- **Test Examples**: Run `python main.py` for comprehensive examples
+
+### Contributing
+1. Fork the main repository
+2. Create feature branch for compliance validator changes
+3. Add test cases in `main.py` or create new test files
+4. Ensure all existing tests pass
+5. Submit pull request with detailed description
 
 ---
 
-**⚖️ Ensuring Legal Metrology compliance for Indian retail and e-commerce**
+**⚖️ Ensuring Legal Metrology compliance for Indian retail and e-commerce**  
+**🇮🇳 Built for the Indian market with comprehensive legal coverage**

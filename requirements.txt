@@ -1,0 +1,14 @@
+opencv-contrib-python
+torch
+torchvision
+torchaudio
+surya-ocr
+transformers
+accelerate
+python-dotenv
+ultralytics
+numpy
+pillow
+scikit-learn
+pygrabber
+matplotlib

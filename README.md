@@ -115,6 +115,16 @@ graph TD
    python run_full_pipeline.py
    ```
 
+6. **Launch Web Interface (Optional)**
+   ```bash
+   # Easy launch from project root
+   python launch_web.py
+   
+   # Or from web directory
+   cd web && python run_app.py
+   ```
+   The web interface will be available at http://localhost:8501
+
 ## 📖 Usage Guide
 
 ### Complete Workflow
@@ -132,6 +142,24 @@ python run_full_pipeline.py
 5. **🛠️ Data Refinement**: AI-powered cleaning and field extraction
 6. **⚖️ Compliance Check**: Validation against Legal Metrology rules
 7. **📊 Detailed Report**: Comprehensive compliance status with violations
+
+### 🌐 Web Interface
+
+For a user-friendly experience, launch the Streamlit web interface:
+
+```bash
+python launch_web.py
+```
+
+**Web Interface Features:**
+- **📷 Live Camera**: Real-time camera preview and instant capture
+- **📂 File Upload**: Drag-and-drop image processing with batch support  
+- **📊 Batch Processing**: Multiple image analysis with progress tracking
+- **⚙️ Settings**: Configure OCR parameters and detection thresholds
+- **📈 Analytics**: Visual compliance statistics and violation trends
+- **📋 Export**: Download results as PDF, Excel, or JSON reports
+
+Access the interface at: **http://localhost:8501**
 
 ### Module Usage Examples
 

@@ -7,8 +7,11 @@ Contains all model paths, thresholds, and parameters
 import os
 from pathlib import Path
 
+# Get project root directory
+PROJECT_ROOT = Path(__file__).parent
+
 # Model Configuration
-YOLO_MODEL_PATH = 'yolov8n.pt'  # Note: This is a general object detection model, not specifically for text
+YOLO_MODEL_PATH = PROJECT_ROOT / 'yolov8n.pt'  # Use absolute path from project root
 HF_MODEL_NAME = 'google/flan-t5-base'  # A good, general-purpose model for structuring
 SURYA_LANG_CODES = ['en', 'hi']  # English and Hindi support
 
@@ -22,6 +25,7 @@ MIN_TEXT_BOXES_FOR_PANEL = 3  # Minimum text boxes to consider a valid panel
 
 # Camera Configuration
 CAMERA_INDEX = 0  # Default camera
+DEFAULT_CAMERA_INDEX = 0  # Default camera index for Streamlit interface
 CAMERA_WIDTH = 1280
 CAMERA_HEIGHT = 720
 CAMERA_FPS = 30
